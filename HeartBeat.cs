@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HeartBeat.RwpSvc;
 
 namespace HeartBeat
 {
@@ -15,6 +16,30 @@ namespace HeartBeat
         public t()
         {
             InitializeComponent();
+        }
+
+        void UpdateStats(RSR_CalItems rsr)
+        {
+            m_ebLastResponse.Text = rsr.Reason;
+
+            if (rsr.Result)
+                {
+                m_ebStatus.Text = "ONLINE";
+                m_ebStatus.BackColor = Color.Green;
+                }
+            else
+                {
+                m_ebStatus.Text = "OFFLINE";
+                m_ebStatus.BackColor = Color.Red;
+                }
+        }
+        private void StartHeartbeat(object sender, EventArgs e)
+        {
+            PracticeClient client = new PracticeClient();
+
+            RSR_CalItems calItems = client.GetCalendarForTeam("InvalidTeam");
+
+            UpdateStats(calItems);
         }
     }
 }
